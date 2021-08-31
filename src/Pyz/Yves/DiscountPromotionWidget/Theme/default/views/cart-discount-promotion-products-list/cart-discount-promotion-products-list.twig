@@ -1,0 +1,63 @@
+{% extends view('cart-discount-promotion-products-list', '@SprykerShop:DiscountPromotionWidget') %}
+
+{% block body %}
+    {% if data.promotionProducts is not empty %}
+        <h4 class="title title--promotion title--medium title--with-border">{{ 'cart.promotion.items' | trans }}</h4>
+
+        {% for product in data.promotionProducts %}
+            {% embed molecule('product-item') with {
+                modifiers: ['promotional'],
+                data: {
+                    product: product,
+                },
+            } only %}
+                {% block productThumbnail %}
+                    {% set modifiers = ['small'] %}
+
+                    {{ parent() }}
+                {% endblock %}
+
+                {% block content %}
+                    <div class="col col--expand spacing-left spacing-left--inner spacing-left--big">
+                        {{ parent() }}
+
+                        <div class="grid">
+                            {% include molecule('variant-configurator', 'DiscountPromotionWidget') with {
+                                class: 'col col--lg-9 col--sm-12',
+                                data: {
+                                    sku: data.sku,
+                                    superAttributes: data.product.attributeMap.superAttributes,
+                                    selectedAttributes: data.product.selectedAttributes,
+                                    availableAttributes: data.product.availableAttributes,
+                                },
+                            } only %}
+                        </div>
+
+                        {% set isDisabled = not data.product.idProductConcrete or not data.product.available %}
+
+                        {% widget 'AddToCartFormWidget' args [config, data.product, isDisabled] only %}
+                            {% block embeddedData %}
+                                {% set disabledAttribute = data.isDisabled ? 'disabled' %}
+
+                                <div class="grid grid--bottom grid--justify">
+                                    {% include molecule('product-quantity-input') with {
+                                        data: {
+                                            maxQuantity: data.product.promotionItem.maxQuantity,
+                                            hasUpdateButton: false,
+                                        },
+                                    } only %}
+
+                                    <div class="col col--sm-12 col--md-4 text-right">
+                                        <button class="button button--hollow button--promotion-item" {{ disabledAttribute }} data-init-single-click {{ qa('add-to-cart-button') }}>
+                                            {{- 'page.detail.add-to-cart' | trans -}}
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endblock %}
+                        {% endwidget %}
+                    </div>
+                {% endblock %}
+            {% endembed %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

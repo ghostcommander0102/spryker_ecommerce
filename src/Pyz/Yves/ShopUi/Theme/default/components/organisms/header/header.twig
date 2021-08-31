@@ -1,0 +1,182 @@
+{% extends model('component') %}
+
+{% define config = {
+    name: 'header',
+    tag: 'header'
+} %}
+
+{% define data = {
+    showSearchForm: true,
+    showNavigation: true
+} %}
+
+{% block body %}
+    {% set benefits = [
+        'global.benefit.free_returns',
+        'global.benefit.warranty',
+        'global.benefit.competitive_prices'
+    ] %}
+
+    {% widget 'AgentControlBarWidget' only %}{% endwidget %}
+
+{#    <div class="{{ config.name }}__top">#}
+{#        <div class="container grid grid--justify">#}
+{#            {% include molecule('panel-info') with {#}
+{#                class: 'grid grid--justify',#}
+{#                data: {#}
+{#                    info: benefits,#}
+{#                },#}
+{#            } only %}#}
+
+{#            <div class="col {{ config.name }}__currency-lang">#}
+{#                <div class="{{ config.name }}__select">#}
+{#                    {% widget 'LanguageSwitcherWidget' args [#}
+{#                        app.request.pathInfo,#}
+{#                        app.request.queryString,#}
+{#                        app.request.requestUri#}
+{#                    ] with {#}
+{#                        data: {#}
+{#                            additionalClassName: config.name,#}
+{#                        },#}
+{#                    } only %}{% endwidget %}#}
+{#                </div>#}
+
+{#                <div class="{{ config.name }}__select">#}
+{#                    {%- widget 'CurrencyWidget' with {#}
+{#                        data: {#}
+{#                            additionalClassName: config.name,#}
+{#                        },#}
+{#                    } only -%}{%- endwidget -%}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+    <header class="section-header">
+
+        <section class="header-main border-bottom">
+            <div class="container">
+                <div class="row align-items-center text-center">
+                    <div class="col-lg-2 col-4">
+                        <a href="http://bootstrap-ecommerce.com" class="brand-wrap" data-nsfw-filter-status="swf">
+                            <img class="logo" src="{{ publicPath('images/main/dlg_logo.png') }}">
+                        </a> <!-- brand-wrap.// -->
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <form action="#" class="search">
+                            <div class="input-group w-100">
+                                <input type="text" class="form-control" placeholder="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form> <!-- search-wrap .end// -->
+                    </div> <!-- col.// -->
+                    <div class="col-lg-4 col-sm-6 col-12">
+                        <div class="widgets-wrap float-md-right">
+                            <div class="widget-header  mr-3">
+                                <a href="#" class="icon icon-sm rounded-circle border" data-nsfw-filter-status="swf"><i
+                                        class="fa fa-gift"></i></a>
+                                <p>Gifts</p>
+                            </div>
+                            <div class="widget-header  mr-3">
+                                <a href="#" class="icon icon-sm rounded-circle border" data-nsfw-filter-status="swf"><i
+                                        class="fa fa-shopping-bag"></i></a>
+                                <p>Check</p>
+                            </div>
+                            <div class="widget-header  mr-3">
+                                <a href="#" class="icon icon-sm rounded-circle border" data-nsfw-filter-status="swf"><i
+                                        class="fa fa-shopping-cart"></i></a>
+                                <span class="badge badge-pill badge-danger notify"
+                                      data-nsfw-filter-status="swf">10</span>
+                                <p>Cart</p>
+                            </div>
+                            <!-- <div class="widget-header mr-3 icontext"> -->
+                            <div class="widget-header mr-3">
+                                <a href="#" class="icon icon-sm rounded-circle border" data-nsfw-filter-status="swf" data-toggle="modal" data-target="#loginDialog"><i
+                                        class="fa fa-user"></i></a>
+                                <p>User</p>
+                                <!--                 <div class="text">
+                    <span class="text-muted" data-nsfw-filter-status="swf">Welcome!</span>
+                    <div>
+                        <a href="#" data-toggle="modal" data-target=".login-register-form" data-nsfw-filter-status="swf">Sign in</a> |
+                        <a href="#" data-nsfw-filter-status="swf"> Register</a>
+                    </div>
+                </div> -->
+                            </div>
+
+                        </div> <!-- widgets-wrap.// -->
+                    </div> <!-- col.// -->
+                </div> <!-- row.// -->
+            </div> <!-- container.// -->
+        </section> <!-- header-main .// -->
+    </header> <!-- section-header.// -->
+    <div class="container">
+        <div class="{{ config.name }}__search-overlay js-suggest-search__overlay">
+            <div class="{{ config.name }}__search-overlay-container">
+                <div class="{{ config.name }}__search-close js-suggest-search__hide">
+                    {% include atom('icon') with {
+                        class: config.name ~ '__search-close-icon',
+                        data: {
+                            name: 'close'
+                        }
+                    } only %}
+                </div>
+
+                {% if data.showSearchForm %}
+                    {% include molecule('search-form') with {
+                        attributes: {
+                            'data-search-id': 'desktop'
+                        }
+                    } only %}
+                {% endif %}
+            </div>
+            <div class="{{ config.name }}__overlay-shadow js-suggest-search__hide"></div>
+        </div>
+
+        {% block additionalLink %}{% endblock %}
+
+        <div class="{{ config.name }}__row {{ config.name }}__navigation-top grid grid--middle grid--justify">
+            <div class="col col--sm-12 col--lg-4 is-hidden-sm-md">
+                {% if data.showSearchForm %}
+                    <div class="{{ config.name }}__search-open js-suggest-search__show">
+                        {% include atom('icon') with {
+                            class: config.name ~ '__search-open-icon',
+                            data: {
+                                name: 'search'
+                            }
+                        } only %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col col--sm-12 col--lg-4">
+                {% include molecule('logo') with {
+                    modifiers: modifiers,
+                    class: 'grid grid--center'
+                } only %}
+            </div>
+
+            <div class="col col--lg-4 is-hidden-sm-md">
+                {% if data.showNavigation %}
+                    {% include organism('navigation-top') only %}
+                {% endif %}
+            </div>
+        </div>
+        {% if data.showNavigation %}
+            <div class="is-hidden-lg-xl">
+                <div class="{{ config.name }}__row {{ config.name }}__navigation-top">
+                    {% include molecule('navigation-top-mobile') only %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    {% if data.showNavigation %}
+        <div class="{{ config.name }}__row {{ config.name }}__navigation-main is-hidden-sm-md">
+            {% block mainNavigation %}
+                {% widget 'NavigationWidget' args ['MAIN_NAVIGATION_DESKTOP', 'navigation-header'] %}{% endwidget %}
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
